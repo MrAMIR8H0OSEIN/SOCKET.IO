@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname,'public')));
 
 const PORT = process.env.PORT ?? 3000;
 
-const chatBotName = 'bot';
+const chatBotName = 'ربات';
 io.on('connection', (socket) => {
     socket.on('join',(data)=>{
         addUser(socket.id,data.username,data.room);
