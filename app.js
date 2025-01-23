@@ -3,6 +3,7 @@ const socketio = require('socket.io');
 const http = require('http');
 const path = require('path');
 const { chatFormat } = require('./utility/chatFormat');
+const { addUser, findUser, users, deleteUser } = require('./models/user');
 require('dotenv').config();
 
 const app = express();
@@ -15,17 +16,25 @@ const PORT = process.env.PORT ?? 3000;
 
 const chatBotName = 'bot';
 io.on('connection', (socket) => {
-    socket.emit("message", chatFormat("Welcome to the ChatRoom",chatBotName));
+    socket.on('join',(data)=>{
+        addUser(socket.id,data.username,data.room);
 
-    socket.broadcast.emit("message",chatFormat("user join chat",chatBotName));
+        socket.join(data.room);
 
-    socket.on('createMessage',msg=>{
-        io.emit("message",chatFormat(msg,"user"));
+        socket.emit("message", chatFormat(`به چت روم ${data.room} خوش آمدید`,chatBotName));
+
+        socket.broadcast.to(data.room).emit("message",chatFormat(`${data.username} وارد چت شد`,chatBotName));  
+
+        socket.on('createMessage',msg=>{
+            io.to(data.room).emit("message",chatFormat(msg,data.username));
+        }) 
+
+        socket.on('disconnect',()=>{
+            deleteUser(socket.id);
+            io.to(data.room).emit("message",chatFormat(`${data.username} از چت خارج شد`,chatBotName));
+        })
     })
-
-    socket.on('disconnect',()=>{
-        io.emit("message",chatFormat("user left chat",chatBotName));
-    })
+    
 });
 
 server.listen(PORT,()=>{

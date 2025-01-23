@@ -1,10 +1,15 @@
 const socket = io();
 const chatMessages = document.querySelectorAll('.chat-messages')[0];
+const urlParams = new URLSearchParams(window.location.search);
+const username = urlParams.get("username");
+const room = urlParams.get("room");
 
 socket.on('message',message=>{
     outputMessage(message);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 })
+
+socket.emit('join',{ username,room });
 
 const formMessage = document.getElementById('chat-form');
 formMessage.addEventListener('submit',e=>{
