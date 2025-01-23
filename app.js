@@ -3,7 +3,7 @@ const socketio = require('socket.io');
 const http = require('http');
 const path = require('path');
 const { chatFormat } = require('./utility/chatFormat');
-const { addUser, findUser, users, deleteUser } = require('./models/user');
+const { addUser, findUserByRoom, deleteUser } = require('./models/user');
 require('dotenv').config();
 
 const app = express();
@@ -21,6 +21,8 @@ io.on('connection', (socket) => {
 
         socket.join(data.room);
 
+        io.to(data.room).emit("roomUsers",findUserByRoom(data.room));
+
         socket.emit("message", chatFormat(`به چت روم ${data.room} خوش آمدید`,chatBotName));
 
         socket.broadcast.to(data.room).emit("message",chatFormat(`${data.username} وارد چت شد`,chatBotName));  
@@ -32,6 +34,8 @@ io.on('connection', (socket) => {
         socket.on('disconnect',()=>{
             deleteUser(socket.id);
             io.to(data.room).emit("message",chatFormat(`${data.username} از چت خارج شد`,chatBotName));
+
+            io.to(data.room).emit("roomUsers",findUserByRoom(data.room));
         })
     })
     

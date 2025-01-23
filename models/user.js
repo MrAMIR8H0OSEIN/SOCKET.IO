@@ -1,6 +1,8 @@
 const users = [];
 
-exports.users = users;
+exports.findUserByRoom = (room)=>{
+    return users.filter(f=>f.room == room);
+}
 
 exports.addUser = (id,username,room)=>{
     users.push({ id,username,room });
