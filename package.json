@@ -1,0 +1,24 @@
+{
+  "name": "socket.io",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrAMIR8H0OSEIN/SOCKET.IO.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrAMIR8H0OSEIN/SOCKET.IO/issues"
+  },
+  "homepage": "https://github.com/MrAMIR8H0OSEIN/SOCKET.IO#readme",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
