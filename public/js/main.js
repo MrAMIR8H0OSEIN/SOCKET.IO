@@ -10,11 +10,14 @@ const room = urlParams.get("room");
 
 socket.on('message',message=>{
     outputMessage(message);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    if(chatMessages.scrollHeight-608 < 0){
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }else if(chatMessages.scrollTop == chatMessages.scrollHeight-608){
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 })
 
 socket.on('roomUsers',users=>{
-    console.log(users);
     roomTitle.innerHTML = room;
     userList.innerHTML = "";
     users.forEach(user => {
@@ -40,7 +43,7 @@ function outputMessage(message){
 
     divMessage.classList.add('message');
     divMessage.innerHTML = `
-    <p class="meta">${message.user} <span style="direction: ltr;">${message.time}</span></p>
+    <p class="meta">${message.user} <span style="direction: ltr; display: inline-block;">${message.time}</span></p>
     <p class="text">
         ${message.text}
     </p>`;
